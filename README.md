@@ -15,3 +15,4 @@ Implementation of a few different bit-reversion algorithms:
     > for `$type`.
  
     for `$type = u8, u16, ..., u128` (I renamed the trait and method name afterwards). These basically all ended up being algorithms that do some variation of "scanning through the binary using shifts and accumulate a result". The `u32` case is interesting in that it uses a lookup table for certain values.
+* LUT: store all 8-bit reversions in a table and just index into that as necessary
