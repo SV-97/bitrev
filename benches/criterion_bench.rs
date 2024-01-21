@@ -5,7 +5,7 @@ use rand_chacha::ChaCha12Rng;
 
 fn rev_all<T: ReverseBits + Copy>(vals: &[T]) {
     for x in vals {
-        black_box(x.reverse_bits());
+        black_box(x.reverse_bits_base());
     }
 }
 
@@ -34,7 +34,7 @@ fn rev_all_lut<T: ReverseBitsLut + Copy>(vals: &[T]) {
 }
 
 /// Number of integers considered per run
-const PER_RUN: usize = 1024;
+const PER_RUN: usize = 1;
 
 // run all the different implementations for a given type of values
 macro_rules! do_a_benchy_bench {

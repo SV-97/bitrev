@@ -5,12 +5,12 @@ use std::simd::Simd;
 use num::Num;
 
 pub trait ReverseBits {
-    fn reverse_bits(self) -> Self;
+    fn reverse_bits_base(self) -> Self;
 }
 
 impl ReverseBits for u8 {
     #[inline(always)]
-    fn reverse_bits(self) -> Self {
+    fn reverse_bits_base(self) -> Self {
         #[inline(always)]
         fn rev(nibble: u8) -> u8 {
             let a = nibble & 0b1000;
@@ -26,7 +26,7 @@ impl ReverseBits for u8 {
 }
 
 impl<const N: usize> ReverseBits for [u8; N] {
-    fn reverse_bits(mut self) -> Self {
+    fn reverse_bits_base(mut self) -> Self {
         self.reverse();
         for i in 0..N {
             self[i] = self[i].reverse_bits()
@@ -40,8 +40,8 @@ impl<const N: usize> ReverseBits for [u8; N] {
 macro_rules! rev_through_bytes {
     ($t:ty) => {
         impl ReverseBits for $t {
-            fn reverse_bits(self) -> Self {
-                <$t>::from_ne_bytes(self.to_ne_bytes().reverse_bits())
+            fn reverse_bits_base(self) -> Self {
+                <$t>::from_ne_bytes(self.to_ne_bytes().reverse_bits_base())
             }
         }
     };
@@ -295,7 +295,7 @@ mod tests {
             proptest! {
                 #[test]
                 fn $reg(x: $t) {
-                    assert!(is_rev_pair(x, x.reverse_bits()))
+                    assert!(is_rev_pair(x, x.reverse_bits_base()))
                 }
 
                 #[test]
